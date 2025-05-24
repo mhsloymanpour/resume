@@ -115,7 +115,7 @@ const Resume = () => {
                     onClick={() => setIsEnglish(!isEnglish)}
                     className="btn btn-info  text-white "
                   >
-                    {isEnglish ? "فارسی" : "English"}
+                    {isEnglish ? " فارسی" : "English"}
                   </button>
                 </div>
 
