@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Typewriter } from "react-simple-typewriter";
 import {
   FiMail,
   FiPhone,
@@ -8,7 +7,6 @@ import {
   FiGithub,
   FiExternalLink,
   FiCode,
-  FiAward,
   FiBriefcase,
   FiUser,
 } from "react-icons/fi";
@@ -24,6 +22,49 @@ import {
 import ProfileImage from "./picture/1000015333.jpg";
 import { englishContent } from "./data/enData";
 import { persianContent } from "./data/faData";
+
+const FramerTypewriter = ({ text, speed = 0.1 }) => {
+  const [displayedText, setDisplayedText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText((prev) => prev + text[currentIndex]);
+        setCurrentIndex((prev) => prev + 1);
+      }, speed * 1000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, text, speed]);
+
+  // Reset animation when text changes
+  useEffect(() => {
+    setDisplayedText("");
+    setCurrentIndex(0);
+  }, [text]);
+
+  return (
+    <motion.span
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      {displayedText}
+      <motion.span
+        animate={{ opacity: [0, 1, 0] }}
+        transition={{
+          repeat: Infinity,
+          duration: 0.8,
+          repeatDelay: 0.2,
+        }}
+        className="ml-0.5"
+      >
+        |
+      </motion.span>
+    </motion.span>
+  );
+};
 
 const Resume = () => {
   const [isEnglish, setIsEnglish] = useState(true);
@@ -100,22 +141,17 @@ const Resume = () => {
                       {content.header.name}
                     </h1>
                     <div className="text-xl md:text-2xl font-medium opacity-90 mb-4">
-                      <Typewriter
-                        words={[content.header.title]}
-                        loop={1}
-                        cursor
-                        cursorStyle="_"
-                        typeSpeed={70}
-                        deleteSpeed={50}
-                        delaySpeed={1000}
+                      <FramerTypewriter
+                        text={content.header.title}
+                        speed={0.1}
                       />
                     </div>
                   </div>
                   <button
                     onClick={() => setIsEnglish(!isEnglish)}
-                    className="btn btn-info  text-white "
+                    className="btn btn-info text-white"
                   >
-                    {isEnglish ? " فارسی" : "English"}
+                    {isEnglish ? "فارسی" : "English"}
                   </button>
                 </div>
 
